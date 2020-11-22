@@ -17,19 +17,20 @@ puppeteer.use(RecaptchaPlugin({
   }
 }))
 
-const browser = await puppeteer.launch({headless: true})
-
 const newPage = async (browser) => {
   const page = await browser.newPage()
   await page.setViewport({width: 1200, height: 800})
-
   return page
 }
 
+const browser = await puppeteer.launch({headless: true})
+const microsoftPage = await newPage(browser)
+const targetPage = await newPage(browser)
+
 const checkStock = async () => {
   try {
-    await checkMicrosoft(await newPage(browser))
-    await checkTarget(await newPage(browser))
+    await checkMicrosoft(microsoftPage)
+    await checkTarget(targetPage)
   } catch (err) {
     console.log('ERROR: ')
     console.log(err)
