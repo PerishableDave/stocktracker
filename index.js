@@ -1,7 +1,6 @@
 import puppeteer from 'puppeteer-extra'
 import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import RecaptchaPlugin from 'puppeteer-extra-plugin-recaptcha'
-import config from './config.js'
 import dotenv from 'dotenv'
 import twilio from 'twilio'
 import cron from 'node-cron'
@@ -20,7 +19,7 @@ puppeteer.use(RecaptchaPlugin({
 
 const browser = await puppeteer.launch({headless: true})
 
-const newPage = (browser) => {
+const newPage = async (browser) => {
   const page = await browser.newPage()
   await page.setViewport({width: 1200, height: 800})
 
@@ -29,8 +28,8 @@ const newPage = (browser) => {
 
 const checkStock = async () => {
   try {
-    await checkMicrosoft(newPage(browser))
-    await checkTarget(newPage(browser))
+    await checkMicrosoft(await newPage(browser))
+    await checkTarget(await newPage(browser))
   } catch (err) {
     console.log('ERROR: ')
     console.log(err)
